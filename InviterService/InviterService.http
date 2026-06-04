@@ -1,0 +1,11 @@
+@InviterService_HostAddress = http://localhost:5036
+
+POST {{InviterService_HostAddress}}/api/fsdh/invitation
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email":"someone@domain.com"
+}
+
+###
