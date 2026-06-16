@@ -1,12 +1,11 @@
 {
   "name": "General Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/base:noble",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0-noble",
   "overrideFeatureInstallOrder": [
     "ghcr.io/KingBain/devcontainer-features/enhanced-custom-root-ca"
   ],
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:3": {},
-    "ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {},
     "ghcr.io/devcontainers/features/azure-cli:1": {},
     "ghcr.io/devcontainers-extra/features/jfrog-cli:1": {},
     "ghcr.io/devcontainers-community/npm-features/prettier:1": {},
