@@ -57,7 +57,7 @@
 *.gif       binary
 
 # === Security Keys and Certificates ===
-# Strong-name key files (.snk), private keys (.pfx), and certificates (.cer) 
+# Strong-name key files (.snk), private keys (.pfx), and certificates (.cer)
 # are binary and should not be transformed.
 *.snk       binary
 *.pfx       binary
