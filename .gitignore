@@ -65,6 +65,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# VS Code C# file-based application discovery cache
+/dotnet/runfile-discovery/
+
 # Tye
 .tye/
 

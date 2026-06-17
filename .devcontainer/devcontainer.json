@@ -1,0 +1,19 @@
+{
+  "name": "General Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0-noble",
+  "overrideFeatureInstallOrder": [
+    "ghcr.io/KingBain/devcontainer-features/enhanced-custom-root-ca"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:3": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/jfrog-cli:1": {},
+    "ghcr.io/devcontainers-community/npm-features/prettier:1": {},
+    "ghcr.io/KingBain/devcontainer-features/enhanced-custom-root-ca:3": {
+      "sources": "https://raw.githubusercontent.com/gccloudone-aurora-collab/goc-root-cert-mirror/main/certs/GoC-GdC-Root-A.crt",
+      "fingerprints": "FE:E0:9E:77:43:BF:D4:3E:D7:D4:D3:ED:50:6C:C7:9D:2D:90:70:FF:A9:29:91:16:87:D4:27:33:70:BE:A3:06",
+      "allowInsecureDownload": true
+    }
+  },
+  "postCreateCommand": "[ -f global.json ] && curl -fsSL https://dot.net/v1/dotnet-install.sh | sudo bash /dev/stdin --jsonfile global.json --install-dir /usr/share/dotnet || echo 'No global.json found, skipping.'"
+}
