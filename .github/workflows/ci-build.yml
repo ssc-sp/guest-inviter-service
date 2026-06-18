@@ -23,12 +23,16 @@ on:
       - "InviterService.Tests/**"
       - ".github/workflows/pr-build.yml"
 
-permissions: read-all
+permissions: {}
 
 jobs:
   build:
     name: Build .NET Project
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout code
