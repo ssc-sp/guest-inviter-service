@@ -48,7 +48,7 @@ public class FsdhControllerTests
         };
 
         var mockAdapter = RequestAdapterMockHelper.CreateMockAdapter();
-        
+
         mockAdapter.Setup(a => a.SendAsync(
             It.IsAny<RequestInformation>(),
             It.IsAny<ParsableFactory<UserCollectionResponse>>(),
@@ -119,7 +119,7 @@ public class FsdhControllerTests
     {
         // Arrange
         var mockAdapter = RequestAdapterMockHelper.CreateMockAdapter();
-        
+
         mockAdapter.Setup(a => a.SendAsync(
             It.IsAny<RequestInformation>(),
             It.IsAny<ParsableFactory<UserCollectionResponse>>(),
