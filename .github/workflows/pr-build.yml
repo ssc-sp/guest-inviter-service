@@ -36,4 +36,15 @@ jobs:
         run: dotnet build InviterService/InviterService.csproj --configuration Release --no-restore /warnaserror
 
       - name: Run tests
-        run: dotnet test InviterService.Tests/InviterService.Tests.csproj --configuration Release --no-restore
+        run: >
+          dotnet test InviterService.Tests/InviterService.Tests.csproj
+          --configuration Release
+          --no-restore
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: ./TestResults/**/coverage.cobertura.xml
+          format: cobertura
