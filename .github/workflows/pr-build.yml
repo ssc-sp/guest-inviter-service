@@ -8,6 +8,7 @@ on:
     paths:
       - "global.json"
       - "Directory.Packages.props"
+      - "coverlet.runsettings"
       - "InviterService/**"
       - "InviterService.Tests/**"
       - ".github/workflows/pr-build.yml"
@@ -47,6 +48,7 @@ jobs:
           --configuration Release
           --no-restore
           --collect:"XPlat Code Coverage"
+          --settings coverlet.runsettings
           --results-directory ./TestResults
 
       - name: Locate coverage report
