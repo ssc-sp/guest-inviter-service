@@ -9,6 +9,8 @@ on:
       - "global.json"
       - "Directory.Packages.props"
       - "InviterService/**"
+      - "InviterService.Tests/**"
+      - ".github/workflows/pr-build.yml"
 
 permissions: read-all
 
@@ -30,12 +32,16 @@ jobs:
           global-json-file: global.json
 
       - name: Restore dependencies
-        run: dotnet restore InviterService/InviterService.csproj
+        run: dotnet restore InviterService.Tests/InviterService.Tests.csproj
 
       - name: Build project
-        run: dotnet build InviterService/InviterService.csproj --configuration Release --no-restore /warnaserror
+        run: >
+          dotnet build InviterService/InviterService.csproj
+          --configuration Release
+          --no-restore
+          /warnaserror
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: >
           dotnet test InviterService.Tests/InviterService.Tests.csproj
           --configuration Release
@@ -43,11 +49,36 @@ jobs:
           --collect:"XPlat Code Coverage"
           --results-directory ./TestResults
 
-      - name: Copy coverage file to a predictable path
-        run: cp ./TestResults/*/coverage.cobertura.xml ./TestResults/coverage.cobertura.xml
+      - name: Locate coverage report
+        shell: bash
+        run: |
+          coverage_file="$(
+            find ./TestResults \
+              -type f \
+              -name "coverage.cobertura.xml" \
+              -print \
+              -quit
+          )"
+
+          if [[ -z "${coverage_file}" ]]; then
+            echo "::error::Coverage report was not generated"
+
+            if [[ -d ./TestResults ]]; then
+              find ./TestResults -type f -print
+            else
+              echo "./TestResults does not exist"
+            fi
+
+            exit 1
+          fi
+
+          cp "${coverage_file}" ./TestResults/coverage.cobertura.xml
+
+          echo "Coverage report copied from:"
+          echo "${coverage_file}"
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
-          file: ./TestResults/**/coverage.cobertura.xml
+          file: ./TestResults/coverage.cobertura.xml
           format: cobertura
