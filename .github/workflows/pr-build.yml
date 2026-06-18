@@ -43,8 +43,11 @@ jobs:
           --collect:"XPlat Code Coverage"
           --results-directory ./TestResults
 
+      - name: Copy coverage file to a predictable path
+        run: cp ./TestResults/*/coverage.cobertura.xml ./TestResults/coverage.cobertura.xml
+
       - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           file: ./TestResults/**/coverage.cobertura.xml
           format: cobertura
