@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/InviterService/InviterService.csproj",
+        "${workspaceFolder}/InviterService/InviterService.slnx",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary;ForceNoAlign"
       ],
@@ -34,6 +34,34 @@
         "run",
         "--project",
         "${workspaceFolder}/InviterService/InviterService.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "test",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "${workspaceFolder}/InviterService.Tests/InviterService.Tests.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "watch test",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "test",
+        "--project",
+        "${workspaceFolder}/InviterService.Tests/InviterService.Tests.csproj"
       ],
       "problemMatcher": "$msCompile"
     }

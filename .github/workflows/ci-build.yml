@@ -1,0 +1,101 @@
+---
+name: Build Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "global.json"
+      - "Directory.Packages.props"
+      - "coverlet.runsettings"
+      - "InviterService/**"
+      - "InviterService.Tests/**"
+      - ".github/workflows/pr-build.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "global.json"
+      - "Directory.Packages.props"
+      - "coverlet.runsettings"
+      - "InviterService/**"
+      - "InviterService.Tests/**"
+      - ".github/workflows/pr-build.yml"
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build .NET Project
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # v5.3.0
+        with:
+          global-json-file: global.json
+
+      - name: Restore dependencies
+        run: dotnet restore InviterService.Tests/InviterService.Tests.csproj
+
+      - name: Build project
+        run: >
+          dotnet build InviterService/InviterService.csproj
+          --configuration Release
+          --no-restore
+          /warnaserror
+
+      - name: Run tests with coverage
+        run: >
+          dotnet test InviterService.Tests/InviterService.Tests.csproj
+          --configuration Release
+          --no-restore
+          --collect:"XPlat Code Coverage"
+          --settings coverlet.runsettings
+          --results-directory ./TestResults
+
+      - name: Locate coverage report
+        shell: bash
+        run: |
+          coverage_file="$(
+            find ./TestResults \
+              -type f \
+              -name "coverage.cobertura.xml" \
+              -print \
+              -quit
+          )"
+
+          if [[ -z "${coverage_file}" ]]; then
+            echo "::error::Coverage report was not generated"
+
+            if [[ -d ./TestResults ]]; then
+              find ./TestResults -type f -print
+            else
+              echo "./TestResults does not exist"
+            fi
+
+            exit 1
+          fi
+
+          cp "${coverage_file}" ./TestResults/coverage.cobertura.xml
+
+          echo "Coverage report copied from:"
+          echo "${coverage_file}"
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./TestResults/coverage.cobertura.xml
+          format: cobertura

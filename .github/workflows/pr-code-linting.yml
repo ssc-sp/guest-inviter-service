@@ -1,5 +1,5 @@
 ---
-name: Code Linting
+name: PR Code Linting
 
 on:
   pull_request:

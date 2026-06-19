@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "minimumReleaseAge": "14 days",
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": null,
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions dependencies"
+    },
+    {
+      "description": "Group .NET dependency updates",
+      "matchManagers": ["nuget"],
+      "groupName": ".NET dependencies"
+    },
+    {
+      "description": "Group Dockerfile base image updates",
+      "matchManagers": ["dockerfile"],
+      "matchFileNames": ["InviterService/Dockerfile"],
+      "groupName": "Docker image dependencies"
+    }
+  ]
+}
