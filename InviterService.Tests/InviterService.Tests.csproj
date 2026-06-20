@@ -20,6 +20,7 @@
     </PackageReference>
     <PackageReference Include="Moq" />
     <PackageReference Include="Microsoft.Graph" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
   </ItemGroup>
 
   <ItemGroup>
