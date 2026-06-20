@@ -13,7 +13,7 @@ public class ProgramTests
     public async Task OpenApiEndpoint_WhenDevelopment_ReturnsSuccess()
     {
         // Arrange
-        await using var factory = CreateFactory();
+        await using var factory = new TestProgramWebApplicationFactory();
 
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -33,7 +33,7 @@ public class ProgramTests
     public async Task InvitationEndpoint_WithoutToken_ReturnsUnauthorized()
     {
         // Arrange
-        await using var factory = CreateFactory();
+        await using var factory = new TestProgramWebApplicationFactory();
 
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
@@ -55,22 +55,21 @@ public class ProgramTests
     // Creates a test host for Program.cs using the Development environment.
     // The fake AzureAd settings let the app build its authentication services
     // without needing real tenant/client values during tests.
-    private static WebApplicationFactory<global::Program> CreateFactory()
+    private sealed class TestProgramWebApplicationFactory : WebApplicationFactory<global::Program>
     {
-        return new WebApplicationFactory<global::Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.UseEnvironment("Development");
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder.UseEnvironment("Development");
 
-                builder.ConfigureAppConfiguration((_, config) =>
+            builder.ConfigureAppConfiguration((_, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    config.AddInMemoryCollection(new Dictionary<string, string?>
-                    {
-                        ["AzureAd:Instance"] = "https://login.microsoftonline.com/",
-                        ["AzureAd:TenantId"] = "11111111-1111-1111-1111-111111111111",
-                        ["AzureAd:ClientId"] = "22222222-2222-2222-2222-222222222222"
-                    });
+                    ["AzureAd:Instance"] = "https://login.microsoftonline.com/",
+                    ["AzureAd:TenantId"] = "11111111-1111-1111-1111-111111111111",
+                    ["AzureAd:ClientId"] = "22222222-2222-2222-2222-222222222222"
                 });
             });
+        }
     }
 }
