@@ -12,6 +12,7 @@ public class ProgramTests
     [Fact]
     public async Task OpenApiEndpoint_WhenDevelopment_ReturnsSuccess()
     {
+        // Arrange
         await using var factory = CreateFactory();
 
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -19,8 +20,10 @@ public class ProgramTests
             AllowAutoRedirect = false
         });
 
+        // Act
         var response = await client.GetAsync("/openapi/v1.json");
 
+        // Assert
         Assert.True(
             response.IsSuccessStatusCode,
             $"Expected success but got {(int)response.StatusCode} {response.StatusCode}");
@@ -29,6 +32,7 @@ public class ProgramTests
     [Fact]
     public async Task InvitationEndpoint_WithoutToken_ReturnsUnauthorized()
     {
+        // Arrange
         await using var factory = CreateFactory();
 
         var client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -36,14 +40,21 @@ public class ProgramTests
             AllowAutoRedirect = false
         });
 
-        var response = await client.PostAsJsonAsync("/api/fsdh/invitation", new
+        var requestBody = new
         {
             email = "someone@domain.com"
-        });
+        };
 
+        // Act
+        var response = await client.PostAsJsonAsync("/api/fsdh/invitation", requestBody);
+
+        // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
+    // Creates a test host for Program.cs using the Development environment.
+    // The fake AzureAd settings let the app build its authentication services
+    // without needing real tenant/client values during tests.
     private static WebApplicationFactory<global::Program> CreateFactory()
     {
         return new WebApplicationFactory<global::Program>()
