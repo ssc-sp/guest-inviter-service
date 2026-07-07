@@ -1,0 +1,38 @@
+---
+name: GC SecureArtifacts Scan Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+  id-token: write
+
+env:
+  JF_URL: https://artifacts-artefacts.devops.cloud-nuage.canada.ca
+
+jobs:
+  scan-pull-request:
+    name: Scan Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Frogbot
+        uses: jfrog/frogbot@3a1daa5a4f0a785b3ab48c5fdb6320b8d7d877cb # v2.32.2
+        with:
+          oidc-provider-name: github-oidc
+        env:
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_GIT_PROVIDER: github
+          JF_GIT_API_ENDPOINT: https://api.github.com
+          JF_GIT_OWNER: ${{ github.repository_owner }}
+          JF_GIT_REPO: ${{ github.event.repository.name }}
+          JF_GIT_BASE_BRANCH: main
