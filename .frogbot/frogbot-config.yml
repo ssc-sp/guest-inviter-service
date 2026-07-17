@@ -1,0 +1,22 @@
+# .frogbot/frogbot-config.yml
+
+- params:
+    git:
+      repoName: guest-inviter-service
+      branches:
+        - main
+      aggregateFixes: true
+      branchNameTemplate: "frogbot-${IMPACTED_PACKAGE}-${BRANCH_NAME_HASH}"
+      commitMessageTemplate: "fix(deps): upgrade ${IMPACTED_PACKAGE} to ${FIX_VERSION}"
+      pullRequestTitleTemplate: "[Frogbot] Fix vulnerable dependency: ${IMPACTED_PACKAGE}"
+
+    scan:
+      includeAllVulnerabilities: false
+      failOnSecurityIssues: true
+      fixableOnly: false
+      minSeverity: High
+
+      projects:
+        - installCommand: dotnet restore InviterService/InviterService.slnx
+          workingDirs:
+            - "."

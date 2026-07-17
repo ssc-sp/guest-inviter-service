@@ -1,0 +1,59 @@
+---
+name: GC SecureArtifacts Scan Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+  id-token: write
+
+env:
+  JF_URL: https://artifacts-artefacts.devops.cloud-nuage.canada.ca
+  JF_PROJECT: ssc-fsdh
+
+jobs:
+  scan-pull-request:
+    name: Scan Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup JFrog CLI with OIDC
+        id: setup-jfrog-cli
+        uses: jfrog/setup-jfrog-cli@deda456d982fc5e9a7a020b63eb0d2968aedd33e # v5.1.0
+        env:
+          JFROG_CLI_AVOID_NEW_VERSION_WARNING: "true"
+        with:
+          oidc-provider-name: github-oidc
+          version: 2.91.0
+
+      - name: Verify JFrog authentication
+        shell: bash
+        env:
+          JF_ACCESS_TOKEN: ${{ steps.setup-jfrog-cli.outputs.oidc-token }}
+        run: |
+          set -euo pipefail
+
+          echo "Checking JFrog CLI authentication..."
+          jf rt ping
+
+      - name: Run Frogbot
+        uses: jfrog/frogbot@b6f3bb75e8bcb4bc5b2b3f7122aa6bf37a16faac # v3.3.0
+        env:
+          JF_ACCESS_TOKEN: ${{ steps.setup-jfrog-cli.outputs.oidc-token }}
+          JF_USER: ${{ steps.setup-jfrog-cli.outputs.oidc-user }}
+
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_GIT_PROVIDER: github
+          JF_GIT_API_ENDPOINT: https://api.github.com
+          JF_GIT_OWNER: ${{ github.repository_owner }}
+          JF_GIT_REPO: ${{ github.event.repository.name }}
+          JF_GIT_BASE_BRANCH: main
