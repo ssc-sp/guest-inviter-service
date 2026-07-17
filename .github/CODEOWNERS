@@ -2,5 +2,11 @@
 # This file defines who is responsible for reviewing changes in this repository.
 # See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# All files in the repository
-* @SSC-JDegouffe
+# .NET application and tests
+/InviterService/                         @SSC-JDegouffe
+/InviterService.Tests/                   @SSC-JDegouffe
+
+# .NET SDK, dependencies, and test configuration
+/global.json                             @SSC-JDegouffe
+/Directory.Packages.props                @SSC-JDegouffe
+/coverlet.runsettings                    @SSC-JDegouffe
