@@ -6,7 +6,6 @@
 /InviterService/                         @SSC-JDegouffe
 /InviterService.Tests/                   @SSC-JDegouffe
 
-# .NET SDK, dependencies, and test configuration
+# .NET SDK and dependencies
 /global.json                             @SSC-JDegouffe
 /Directory.Packages.props                @SSC-JDegouffe
-/coverlet.runsettings                    @SSC-JDegouffe
