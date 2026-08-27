@@ -25,7 +25,6 @@ jobs:
           private-key: ${{ secrets.INVITER_RENOVATE_APP_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: ${{ github.event.repository.name }}
-          permission-contents: write
           permission-pull-requests: write
           permission-issues: write
 
