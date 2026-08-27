@@ -1,5 +1,5 @@
 ---
-name: Build Validation
+name: PR Build Validation
 
 on:
   pull_request:
